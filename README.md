@@ -1,5 +1,5 @@
 # twitch-emote-grabber
- Grabs emote from Twitch with a specific emoteset id.
+ Grabs emotes from Twitch with a specific emoteset id.
 
  ## Getting started.
 
