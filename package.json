@@ -1,0 +1,23 @@
+{
+  "name": "twitch-emote-grabber",
+  "version": "1.0.0",
+  "description": "Grabs emote from twitch for a specific emoticon id set.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Y2KForever/twitch-emote-grabber.git"
+  },
+  "author": "Niklas 'Y2KForever' Hansen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Y2KForever/twitch-emote-grabber/issues"
+  },
+  "homepage": "https://github.com/Y2KForever/twitch-emote-grabber#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "node-fetch": "^2.6.1"
+  }
+}
