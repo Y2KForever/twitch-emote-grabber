@@ -17,12 +17,19 @@ try {
     console.error(err);
 }
 
-// Downloading emotes from the twitch cdn.
-downloadEmote = async (id, code) => {
-    const url = 'https://static-cdn.jtvnw.net/emoticons/v1/'+id+'/3.0';
-    const response = await fetch(url);
-    const buffer = await response.buffer();
-    fs.writeFile(`./emotes/${code}.png`, buffer, () => {});
+// Downloading emotes from the twitch / bttv cdn.
+downloadEmote = async (id, code, type, imgtype) => {
+    if(type == "twitch"){
+        const url = 'https://static-cdn.jtvnw.net/emoticons/v1/'+id+'/3.0';
+        const response = await fetch(url);
+        const buffer = await response.buffer();
+        fs.writeFile(`./emotes/${code}.png`, buffer, () => {});
+    }else if (type == "bttv"){
+        const url = 'https://cdn.betterttv.net/emote/'+id+'/3x';
+        const response = await fetch(url);
+        const buffer = await response.buffer();
+        fs.writeFile(`./emotes/${code}.${imgtype}`, buffer, () => {});
+    }
 }
 
 
@@ -35,6 +42,30 @@ fetch('https://api.twitch.tv/kraken/chat/emoticon_images?emotesets='+process.env
     }
 }).then(res => res.json()).then((json) => {
     json['emoticon_sets'][process.env.EMOTESET].forEach((emote) => {
-            downloadEmote(emote['id'], emote['code']);
+            downloadEmote(emote['id'], emote['code'], 'twitch' );
     });
 });
+
+// Fetching global emotes from BTTV
+fetch('https://api.betterttv.net/3/cached/emotes/global', {
+    method: 'GET'
+}).then(res => res.json()).then((json) => {
+    json.forEach((emote) => {
+            downloadEmote(emote['id'], emote['code'], 'bttv', emote['imageType']);
+    })
+});
+
+// Fetching channel & shared emote from BTTV
+fetch(`https://api.betterttv.net/3/cached/users/twitch/${process.env.CHANNEL_ID}`, {
+    method: 'GET'
+}).then(res => res.json()).then((json) => {
+    json['channelEmotes'].forEach((emote) => {
+        downloadEmote(emote['id'], emote['code'], 'bttv', emote['imageType']);
+    });
+    json['sharedEmotes'].forEach((emote) => {
+        downloadEmote(emote['id'], emote['code'], 'bttv', emote['imageType']);
+    })
+});
+
+
+
